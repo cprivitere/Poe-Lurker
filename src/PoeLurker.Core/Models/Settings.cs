@@ -36,9 +36,9 @@ public sealed class Settings
         HideoutEnabled = true;
         BuildAutoClose = true;
         ShowReleaseNote = true;
-        SoldDetection = true;
         MapEnabled = true;
-        ItemAlertEnabled = true;
+        SearchEnabled = true;
+        DashboardEnabled = true;
         OutgoingDelayToClose = 100;
         JoinHideoutVolume = 1;
         AlertVolume = 1;
@@ -265,11 +265,6 @@ public sealed class Settings
     /// Gets or sets a value indicating the delay to close outgoing trades.
     /// </summary>
     public double OutgoingDelayToClose { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating if the user tried to connect with patreon.
-    /// </summary>
-    public bool ConnectedToPatreon { get; set; }
 
     #endregion
 }

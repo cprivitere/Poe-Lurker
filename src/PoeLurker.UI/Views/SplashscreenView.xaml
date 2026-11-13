@@ -13,12 +13,6 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Image Height="80" Source="/Assets/LurkerIcon.png" />
-        <Image Grid.Row="1"
-               Height="30"
-               cal:Message.Attach="[Event MouseDown] = [Action OpenLurkerPro]"
-               Cursor="Hand"
-               Source="https://user-images.githubusercontent.com/5436436/88303508-1a537980-ccd5-11ea-9e27-9139f994101a.png"
-               Visibility="{Binding ShowPatreon, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 
 </UserControl>

@@ -25,7 +25,6 @@ using NAudio.Wave;
 using PoeLurker.Core.Extensions;
 using PoeLurker.Core.Helpers;
 using PoeLurker.Core.Services;
-using PoeLurker.Patreon.Services;
 using PoeLurker.UI.Helpers;
 using PoeLurker.UI.Services;
 using TextCopy;
@@ -46,15 +45,12 @@ public class SettingsViewModel : Screen
     private readonly SettingsService _settingService;
     private readonly HotkeyService _hotkeyService;
     private bool _modified;
-    private string _blessingtext;
     private bool _needsUpdate;
-    private bool _pledging;
     private bool _activated;
     private int _selectedTabIndex;
     private int _alertVolume;
     private int _itemAlertVolume;
     private int _joinHideoutVolume;
-    private readonly PoeLurkerPatreonService _currentPatreonService;
     private readonly SoundService _soundService;
     private CancellationTokenSource _currentTokenSource;
     private bool _hasCustomTradeSound;
@@ -90,12 +86,10 @@ public class SettingsViewModel : Screen
         SoundService soundService,
         HotkeyService hotkeyService,
         GithubService githubService,
-        PushBulletService pushBulletService,
-        PushHoverService pushHoverService,
-        WinookService winookService,
-        PoeLurkerPatreonService patreonService)
+        UnlockedPushBulletService pushBulletService,
+        UnlockedPushHoverService pushHoverService,
+        WinookService winookService)
     {
-        _currentPatreonService = patreonService;
         _winookService = winookService;
         _keyboardHelper = keyboardHelper;
         _settingService = settingsService;
@@ -348,23 +342,6 @@ public class SettingsViewModel : Screen
     public string AnimationFilePath => AssetService.GetFilePath(LottieFileName);
 
     /// <summary>
-    /// Gets the blessing text.
-    /// </summary>
-    public string BlessingText
-    {
-        get
-        {
-            return _blessingtext;
-        }
-
-        private set
-        {
-            _blessingtext = value;
-            NotifyOfPropertyChange();
-        }
-    }
-
-    /// <summary>
     /// Gets or sets the color of the lifebar.
     /// </summary>
     public Color LifebarColor
@@ -431,51 +408,6 @@ public class SettingsViewModel : Screen
             NotifyOfPropertyChange();
         }
     }
-
-    /// <summary>
-    /// Gets a value indicating whether this <see cref="SettingsViewModel"/> is connected.
-    /// </summary>
-    public bool NotConnected
-    {
-        get
-        {
-            return !_settingService.ConnectedToPatreon;
-        }
-    }
-
-    /// <summary>
-    /// Gets the patreon identifier.
-    /// </summary>
-    public string PatreonId => _currentPatreonService.PatreonId;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether this <see cref="SettingsViewModel"/> is pledging.
-    /// </summary>
-    public bool Pledging
-    {
-        get
-        {
-            return _pledging;
-        }
-
-        set
-        {
-            _pledging = value;
-            NotifyOfPropertyChange();
-            NotifyOfPropertyChange(nameof(NotPledging));
-            NotifyOfPropertyChange(nameof(ConnectedWithoutPledging));
-        }
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether [not pledgin].
-    /// </summary>
-    public bool NotPledging => !Pledging;
-
-    /// <summary>
-    /// Gets a value indicating whether [connected without pledge].
-    /// </summary>
-    public bool ConnectedWithoutPledging => !NotConnected && NotPledging;
 
     /// <summary>
     /// Gets or sets a value indicating whether [needs update].
@@ -1060,14 +992,6 @@ public class SettingsViewModel : Screen
     }
 
     /// <summary>
-    /// Set the tab index to lurker pro.
-    /// </summary>
-    public void OpenLurkerPro()
-    {
-        SelectTabIndex = 5;
-    }
-
-    /// <summary>
     /// Opens the logs.
     /// </summary>
     public void OpenLogs()
@@ -1086,12 +1010,6 @@ public class SettingsViewModel : Screen
     /// </summary>
     public void OpenDiscord()
         => OpenUrl("https://discord.com/invite/hQERv7K");
-
-    /// <summary>
-    /// Opens the patreon.
-    /// </summary>
-    public void OpenPatreon()
-        => OpenUrl("https://www.patreon.com/poelurker");
 
     /// <summary>
     /// Activates the window.
@@ -1250,19 +1168,6 @@ public class SettingsViewModel : Screen
     }
 
     /// <summary>
-    /// Gets the patreon identifier.
-    /// </summary>
-    public Task GetPatreonId()
-    {
-        if (string.IsNullOrEmpty(PatreonId))
-        {
-            return Task.CompletedTask;
-        }
-
-        return ClipboardService.SetTextAsync(PatreonId);
-    }
-
-    /// <summary>
     /// Inserts the buyer name token.
     /// </summary>
     public Task InsertBuyerNameToken()
@@ -1309,38 +1214,6 @@ public class SettingsViewModel : Screen
         => OpenUrl(@"https://github.com/C1rdec/Poe-Lurker/blob/main/assets/CheatSheet.md");
 
     /// <summary>
-    /// Logins to patreon.
-    /// </summary>
-    public async Task LoginToPatreon()
-    {
-        await _currentPatreonService.CheckPledgeStatus();
-        Pledging = _currentPatreonService.Pledging;
-
-        if (!Pledging)
-        {
-            await _currentPatreonService.LoginAsync();
-            await _currentPatreonService.CheckPledgeStatus();
-            Pledging = _currentPatreonService.Pledging;
-        }
-
-        if (Pledging)
-        {
-            NotifyPledged();
-        }
-    }
-
-    private void NotifyPledged()
-    {
-        BlessingText = "A blessing I can’t deny";
-        SearchEnabled = true;
-        MapEnabled = true;
-        DashboardEnabled = true;
-        _settingService.ConnectedToPatreon = true;
-        SaveSettings();
-        NotifyOfPropertyChange(() => NotConnected);
-    }
-
-    /// <summary>
     /// Saves the settings.
     /// </summary>
     public async void SaveSettings()
@@ -1351,21 +1224,6 @@ public class SettingsViewModel : Screen
             _hotkeyService.Save();
         });
         Modified = false;
-    }
-
-    /// <summary>
-    /// Pledges this instance.
-    /// </summary>
-    public async void Pledge()
-    {
-        if (Keyboard.IsKeyDown(Key.LeftCtrl))
-        {
-            await GetPatreonId();
-
-            return;
-        }
-
-        OpenUrl("https://www.patreon.com/poelurker");
     }
 
     /// <summary>
@@ -1417,31 +1275,7 @@ public class SettingsViewModel : Screen
         JoinHideoutVolume = (int)(_settingService.JoinHideoutVolume * 100);
         CheckForUpdate();
 
-        if (_settingService.ConnectedToPatreon)
-        {
-            _ = _currentPatreonService.CheckPledgeStatus().ContinueWith(t =>
-            {
-                Pledging = _currentPatreonService.Pledging;
-                if (Pledging)
-                {
-                    BlessingText = "A blessing I can’t deny";
-                }
-                else
-                {
-                    SearchEnabled = false;
-                    DashboardEnabled = false;
-                    MapEnabled = false;
-                    _settingService.ConnectedToPatreon = false;
-                    _settingService.Save();
-                }
-
-                _activated = true;
-            });
-        }
-        else
-        {
-            _activated = true;
-        }
+        _activated = true;
 
         await base.OnActivatedAsync(token);
     }

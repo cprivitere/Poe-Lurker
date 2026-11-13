@@ -25,14 +25,6 @@ public class WelcomeViewModel : Screen
     }
 
     /// <summary>
-    /// Opens the patreon.
-    /// </summary>
-    public void OpenPatreon()
-    {
-        ProcessExtensions.OpenUrl("https://www.patreon.com/poelurker");
-    }
-
-    /// <summary>
     /// Opens the user guide.
     /// </summary>
     public void OpenUserGuide()

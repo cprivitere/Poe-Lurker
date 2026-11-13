@@ -68,14 +68,6 @@ public static class ClipboardHelper
         }
     }
 
-    /// <summary>
-    /// Checks the pledge asynchronous.
-    /// </summary>
-    /// <returns>The task awaiter.</returns>
-    public static Task CheckPledgeStatusAsync()
-    {
-        return ItemParser.CheckPledgeStatus();
-    }
 
     /// <summary>
     /// Retries the on main thread.

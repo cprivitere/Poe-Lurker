@@ -7,7 +7,7 @@
 namespace PoeLurker.UI.ViewModels;
 
 using PoeLurker.Core.Extensions;
-using PoeLurker.Patreon.Services;
+using PoeLurker.UI.Services;
 
 /// <summary>
 /// The push bullet view model.
@@ -17,7 +17,7 @@ public class PushoverViewModel : Caliburn.Micro.PropertyChangedBase
 {
     #region Fields
 
-    private readonly PushHoverService _service;
+    private readonly UnlockedPushHoverService _service;
 
     #endregion
 
@@ -27,7 +27,7 @@ public class PushoverViewModel : Caliburn.Micro.PropertyChangedBase
     /// Initializes a new instance of the <see cref="PushoverViewModel" /> class.
     /// </summary>
     /// <param name="service">The service.</param>
-    public PushoverViewModel(PushHoverService service)
+    public PushoverViewModel(UnlockedPushHoverService service)
     {
         _service = service;
     }

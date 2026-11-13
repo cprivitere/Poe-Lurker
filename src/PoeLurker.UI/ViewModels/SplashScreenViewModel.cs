@@ -10,7 +10,6 @@ using System.IO;
 using System.Reflection;
 using Caliburn.Micro;
 using PoeLurker.Core.Services;
-using PoeLurker.UI.Services;
 
 /// <summary>
 /// Represents a SplashScreen.
@@ -33,7 +32,7 @@ public class SplashscreenViewModel : PropertyChangedBase
     /// </summary>
     /// <param name="settings">The settings.</param>
     /// <param name="eventAggregator">The event aggregator.</param>
-    public SplashscreenViewModel(SettingsViewModel settings, IEventAggregator eventAggregator, PoeLurkerPatreonService patreonService)
+    public SplashscreenViewModel(SettingsViewModel settings, IEventAggregator eventAggregator)
     {
         _settings = settings;
         _eventAggrator = eventAggregator;
@@ -41,20 +40,6 @@ public class SplashscreenViewModel : PropertyChangedBase
         {
             AssetService.Create(LottieFileName, GetResourceContent(LottieFileName));
         }
-
-        Execute.OnUIThread(async () =>
-        {
-            if (!settings.NotConnected)
-            {
-                await patreonService.CheckPledgeStatus();
-                if (patreonService.Pledging)
-                {
-                    return;
-                }
-            }
-
-            ShowPatreon = true;
-        });
     }
 
     #endregion
@@ -66,29 +51,9 @@ public class SplashscreenViewModel : PropertyChangedBase
     /// </summary>
     public string AnimationFilePath => AssetService.GetFilePath(LottieFileName);
 
-    /// <summary>
-    /// Gets or sets a value indicating whether [trial available].
-    /// </summary>
-    public bool TrialAvailable { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether [show patreon].
-    /// </summary>
-    public bool ShowPatreon { get; set; }
-
     #endregion
 
     #region Methods
-
-    /// <summary>
-    /// Opens the lurker pro.
-    /// </summary>
-    public async void OpenLurkerPro()
-    {
-        // Set to luker pro tab
-        _settings.OpenLurkerPro();
-        await IoC.Get<IWindowManager>().ShowWindowAsync(_settings);
-    }
 
     /// <summary>
     /// Gets the content of the resource.

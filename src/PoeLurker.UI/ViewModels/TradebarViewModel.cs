@@ -19,6 +19,7 @@ using PoeLurker.Core.Services;
 using PoeLurker.Patreon.Events;
 using PoeLurker.Patreon.Models;
 using PoeLurker.Patreon.Services;
+using PoeLurker.UI.Services;
 using PoeLurker.UI.Models;
 using ProcessLurker;
 
@@ -40,8 +41,8 @@ public class TradebarViewModel : PoeOverlayBase, IDisposable
     private System.Action _removeActive;
     private readonly List<TradeEvent> _soldOffers;
     private readonly SoundService _soundService;
-    private readonly PushBulletService _pushBulletService;
-    private readonly PushHoverService _pushHoverService;
+    private readonly UnlockedPushBulletService _pushBulletService;
+    private readonly UnlockedPushHoverService _pushHoverService;
     private readonly StashTabService _stashTabService;
 
     #endregion
@@ -72,8 +73,8 @@ public class TradebarViewModel : PoeOverlayBase, IDisposable
         PoeKeyboardHelper keyboardHelper,
         SettingsService settingsService,
         SoundService soundService,
-        PushBulletService pushBulletService,
-        PushHoverService pushHoverService,
+        UnlockedPushBulletService pushBulletService,
+        UnlockedPushHoverService pushHoverService,
         StashTabService stashTabService)
         : base(dockingHelper, processLurker, settingsService)
     {
@@ -624,12 +625,6 @@ public class TradebarViewModel : PoeOverlayBase, IDisposable
     /// </summary>
     protected async override Task OnActivatedAsync(CancellationToken token)
     {
-        if (SettingsService.ConnectedToPatreon)
-        {
-            await _pushBulletService.CheckPledgeStatus();
-            await _pushHoverService.CheckPledgeStatus();
-        }
-
         _keyboardLurker.MainActionPressed += KeyboardLurker_MainActionPressed;
         _keyboardLurker.WhisperPressed += KeyboardLurker_WhisperPressed;
         _keyboardLurker.InvitePressed += KeyboardLurker_InvitePressed;

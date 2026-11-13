@@ -8,7 +8,7 @@ namespace PoeLurker.UI.ViewModels;
 
 using System.Collections.ObjectModel;
 using System.Linq;
-using PoeLurker.Patreon.Services;
+using PoeLurker.UI.Services;
 
 /// <summary>
 /// The push bullet view model.
@@ -18,7 +18,7 @@ public class PushBulletViewModel : Caliburn.Micro.PropertyChangedBase
 {
     #region Fields
 
-    private readonly PushBulletService _service;
+    private readonly UnlockedPushBulletService _service;
     private DeviceViewModel _selectedDevice;
     private DeviceViewModel _popupSelectedDevice;
     private bool _showDevices;
@@ -31,7 +31,7 @@ public class PushBulletViewModel : Caliburn.Micro.PropertyChangedBase
     /// Initializes a new instance of the <see cref="PushBulletViewModel" /> class.
     /// </summary>
     /// <param name="service">The service.</param>
-    public PushBulletViewModel(PushBulletService service)
+    public PushBulletViewModel(UnlockedPushBulletService service)
     {
         _service = service;
         if (service.Device != null && service.Device.Id != null)
@@ -209,11 +209,7 @@ public class PushBulletViewModel : Caliburn.Micro.PropertyChangedBase
         Devices.Clear();
         if (!_service.Connected)
         {
-            await _service.CheckPledgeStatus();
-            if (!_service.Connected)
-            {
-                return;
-            }
+            return;
         }
 
         var devices = await _service.GetDevices();

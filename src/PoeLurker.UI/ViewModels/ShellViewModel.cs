@@ -23,8 +23,8 @@ using PoeLurker.Core.Models;
 using PoeLurker.Core.Services;
 using PoeLurker.Patreon.Events;
 using PoeLurker.Patreon.Models;
-using PoeLurker.Patreon.Services;
 using PoeLurker.UI.Helpers;
+using PoeLurker.Patreon.Services;
 using PoeLurker.UI.Models;
 using PoeLurker.UI.Services;
 using PoeLurker.UI.Views;
@@ -37,7 +37,6 @@ public class ShellViewModel : Conductor<Screen>.Collection.AllActive, IViewAware
 {
     #region Fields
 
-    private readonly PoeLurkerPatreonService PatreonService = new();
     private Window _parent;
     private readonly WinookService _winookService;
     private readonly SoundService _soundService;
@@ -411,8 +410,6 @@ public class ShellViewModel : Conductor<Screen>.Collection.AllActive, IViewAware
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private async void SettingsService_OnSave(object sender, EventArgs e)
     {
-        await CheckPledgeStatus();
-
         if (_settingsService.BuildHelper)
         {
             if (_helpOverlay == null && PoeApplicationContext.IsRunning)
@@ -699,7 +696,6 @@ public class ShellViewModel : Conductor<Screen>.Collection.AllActive, IViewAware
         ShowOverlays(process);
 
         await CheckForUpdate();
-        await CheckPledgeStatus();
 
         await affixServiceTask;
     }
@@ -759,7 +755,7 @@ public class ShellViewModel : Conductor<Screen>.Collection.AllActive, IViewAware
         else
         {
 
-            await _eventAggregator.PublishOnUIThreadAsync(new ManaBulbMessage() { View = new SplashscreenViewModel(this._settingsViewModel, this._eventAggregator, PatreonService), DisplayTime = TimeSpan.FromSeconds(10) });
+            await _eventAggregator.PublishOnUIThreadAsync(new ManaBulbMessage() { View = new SplashscreenViewModel(this._settingsViewModel, this._eventAggregator), DisplayTime = TimeSpan.FromSeconds(10) });
         }
     }
 
@@ -849,17 +845,6 @@ public class ShellViewModel : Conductor<Screen>.Collection.AllActive, IViewAware
         else
         {
             return Execute.OnUIThreadAsync(() => DeactivateItemAsync(_skillTimelineOverlay, true, CancellationToken.None));
-        }
-    }
-
-    /// <summary>
-    /// Checks the pledge status.
-    /// </summary>
-    private async Task CheckPledgeStatus()
-    {
-        if (_settingsService.ConnectedToPatreon)
-        {
-            await ClipboardHelper.CheckPledgeStatusAsync();
         }
     }
 

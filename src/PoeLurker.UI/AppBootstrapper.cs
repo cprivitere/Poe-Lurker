@@ -64,10 +64,10 @@ public class AppBootstrapper : BootstrapperBase
         _container.Singleton<SoundService, SoundService>();
         _container.Singleton<CollaborationService, CollaborationService>();
         _container.Singleton<WinookService, WinookService>();
-        _container.Singleton<PoeLurkerPatreonService, PoeLurkerPatreonService>();
+        _container.Singleton<UnlockedPushBulletService, UnlockedPushBulletService>();
+        _container.Singleton<UnlockedPushHoverService, UnlockedPushHoverService>();
 
-        _container.PerRequest<PushBulletService, PushBulletService>();
-        _container.PerRequest<PushHoverService, PushHoverService>();
+
         _container.Singleton<GithubService, GithubService>();
 
         _container.Singleton<SettingsViewModel, SettingsViewModel>();

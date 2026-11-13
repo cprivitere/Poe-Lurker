@@ -16,17 +16,6 @@
                       mc:Ignorable="d">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button cal:Message.Attach="[Event Click] = [Action OpenPatreon]" Cursor="Hand">
-                <StackPanel Orientation="Horizontal">
-                    <local:IconPack Width="18"
-                                    HorizontalAlignment="Center"
-                                    Data="{x:Static local:IconPackData.Patreon}"
-                                    Foreground="White" />
-                    <TextBlock Margin="4"
-                               VerticalAlignment="Center"
-                               Text="Patreon" />
-                </StackPanel>
-            </Button>
             <Button cal:Message.Attach="[Event Click] = [Action OpenDiscord]" Cursor="Hand">
                 <StackPanel Orientation="Horizontal">
                     <local:IconPack Width="25"
@@ -342,15 +331,6 @@
                                     Value="{Binding AlertVolume}" />
                         </Grid>
                     </StackPanel>
-                    <Image Grid.Row="1"
-                           Height="30"
-                           Margin="0,0,10,65"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom"
-                           cal:Message.Attach="[Event MouseUp] = [Action OpenLurkerPro]"
-                           Cursor="Hand"
-                           Source="https://user-images.githubusercontent.com/5436436/88303508-1a537980-ccd5-11ea-9e27-9139f994101a.png"
-                           Visibility="{Binding NotPledging, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Grid Grid.Row="1"
                           Margin="0,0,0,20"
                           VerticalAlignment="Bottom">
@@ -679,13 +659,7 @@
                         <TextBlock FontSize="16"
                                    TextAlignment="Left"
                                    TextWrapping="Wrap">
-                            Upgrade to Lurker Pro to enjoy exciting new features while supporting the program. You can also show your support by setting a simple 'Powered by' message after completing a trade below.
-                        </TextBlock>
-                        <TextBlock Margin="0,10,0,0"
-                                   FontSize="16"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap">
-                            <Bold>Every bit of help makes a difference!</Bold>
+                            All Lurker Pro features are unlocked in this build. You can also show your support by setting a simple 'Powered by' message after completing a trade below.
                         </TextBlock>
                         <Grid Margin="0,-10,0,0">
                             <Grid.ColumnDefinitions>
@@ -696,20 +670,7 @@
                                             Width="150"
                                             Margin="0,20,0,10"
                                             Data="{x:Static local:IconPackData.Beer}"
-                                            Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                                            Visibility="{Binding Pledging, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <local:IconPack Grid.ColumnSpan="2"
-                                            Width="150"
-                                            Margin="0,20,0,10"
-                                            Data="{x:Static local:IconPackData.Beer}"
-                                            Foreground="{DynamicResource MahApps.Brushes.Accent1}"
-                                            Visibility="{Binding NotConnected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <local:IconPack Grid.ColumnSpan="2"
-                                            Width="150"
-                                            Margin="0,20,0,10"
-                                            Data="{x:Static local:IconPackData.Beer}"
-                                            Foreground="{DynamicResource MahApps.Brushes.Accent1}"
-                                            Visibility="{Binding NotPledging, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            Foreground="{DynamicResource MahApps.Brushes.Accent}" />
                             <Button x:Name="SetPowered"
                                     Grid.Column="1"
                                     Height="50"
@@ -741,41 +702,9 @@
                                 </Button.Content>
                             </Button>
                         </Grid>
-                        <Button x:Name="GetPatreonId"
-                                Margin="0,0,0,10"
-                                HorizontalAlignment="Center"
-                                Content="{Binding BlessingText}"
-                                FontSize="20"
-                                Style="{DynamicResource Tag}"
-                                Visibility="{Binding Pledging, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                        <Button x:Name="LoginToPatreon"
-                                Margin="0,0,0,10"
-                                FontSize="20"
-                                Style="{DynamicResource Patreon}"
-                                Visibility="{Binding NotConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Button.Content>
-                                <Image Height="50"
-                                       Margin="-6"
-                                       HorizontalAlignment="Right"
-                                       VerticalAlignment="Bottom"
-                                       cal:Message.Attach="[Event MouseUp] = [Action OpenLurkerPro]"
-                                       Cursor="Hand"
-                                       Source="https://user-images.githubusercontent.com/5436436/88303508-1a537980-ccd5-11ea-9e27-9139f994101a.png"
-                                       Visibility="{Binding NotPledging, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="Pledge"
-                                Margin="0,0,0,10"
-                                FontSize="20"
-                                Style="{DynamicResource Patreon}"
-                                Visibility="{Binding ConnectedWithoutPledging, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            Become a patron
-                        </Button>
                     </StackPanel>
                     <Grid Grid.Row="2"
-                          Height="70"
-                          IsEnabled="{Binding Pledging}">
+                          Height="70">
                         <StackPanel Margin="30,0,0,0" Orientation="Horizontal">
                             <Controls:ToggleSwitch Margin="0,0,-25,0"
                                                    Header="Item Lurker"

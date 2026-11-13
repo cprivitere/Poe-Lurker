@@ -8,7 +8,7 @@ namespace PoeLurker.UI.ViewModels;
 
 using System;
 using Caliburn.Micro;
-using PoeLurker.Patreon.Services;
+using PoeLurker.UI.Services;
 
 /// <summary>
 /// Represents the provider.
@@ -28,7 +28,7 @@ public class PushProviderViewModel : PropertyChangedBase
     /// </summary>
     /// <param name="name">The name.</param>
     /// <param name="service">The service.</param>
-    public PushProviderViewModel(string name, PushBulletService service)
+    public PushProviderViewModel(string name, UnlockedPushBulletService service)
         : this(name)
     {
         _buildViewModel = () => new PushBulletViewModel(service);
@@ -39,7 +39,7 @@ public class PushProviderViewModel : PropertyChangedBase
     /// </summary>
     /// <param name="name">The name.</param>
     /// <param name="service">The service.</param>
-    public PushProviderViewModel(string name, PushHoverService service)
+    public PushProviderViewModel(string name, UnlockedPushHoverService service)
         : this(name)
     {
         _buildViewModel = () => new PushoverViewModel(service);
