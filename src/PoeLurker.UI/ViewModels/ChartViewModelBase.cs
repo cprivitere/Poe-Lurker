@@ -8,7 +8,7 @@ namespace PoeLurker.UI.ViewModels;
 
 using System;
 using Caliburn.Micro;
-using LiveCharts;
+using PoeLurker.UI.Helpers;
 using PoeLurker.UI.Models;
 
 /// <summary>
